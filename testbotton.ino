@@ -1,33 +1,29 @@
 #include <ESP8266WiFi.h>
-#include "DHT.h"
+#include <MCP3208.h>
+#include <SPI.h>
 
-#define DHTPIN D5       // Digital pin connected to the DHT sensor
-#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
-
-#define Plus_PIN  D7
-#define Minus_PIN D6
+MCP3208 adc(D8);
 
 int a = 0;
 int b = 0;
 int c = 0;
 
 void setup() {
-  Serial.begin(9600);
-//setup  pin degital input.
-  pinMode(Minus_PIN, INPUT);
-  pinMode(Plus_PIN, INPUT);
+  adc.begin();
+  Serial.begin(115200);
 }
 
 void loop() {
-  delay(500);
-  a = digitalRead(Plus_PIN);
-  b = digitalRead(Minus_PIN);
-  if(a == LOW){
+
+  delay(160);
+  a = adc.analogRead(0);
+  b = adc.analogRead(1);
+  if(a >= 2000){
     c = c+1;
     Serial.print(c);
     Serial.println();
   }
-  if(b == LOW){
+  else if(b >= 2000){
     c = c-1;
     Serial.print(c);
     Serial.println();
